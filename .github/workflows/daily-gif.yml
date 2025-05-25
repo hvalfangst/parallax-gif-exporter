@@ -8,6 +8,8 @@ on:
 jobs:
   generate-gif:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write    # Gives write permission to repository contents
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
