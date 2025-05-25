@@ -17,25 +17,30 @@ mod graphics;
 fn main() {
     let args: Vec<String> = env::args().collect();
     let experimental_mode = args.get(1).map(|s| s == "--experimental").unwrap_or(false);
+    let headless_mode = args.get(1).map(|s| s == "--headless").unwrap_or(false) ||
+        args.get(2).map(|s| s == "--headless").unwrap_or(false);
+
     let sprites = SpriteMaps::new();
     let core_logic = initialize_core_logic_map();
 
-    // Create a window with the dimensions of the primary monitor
-    let mut window = Window::new(
-        "Parallax Exporter",
-        SCALED_WINDOW_WIDTH,
-        SCALED_WINDOW_HEIGHT,
-        WindowOptions::default(),
-    ).unwrap_or_else(|e| {
-        panic!("{}", e);
-    });
-
-
-    // Initialize window and scaled buffer
+    // Initialize window buffer and scaled buffer
     let mut window_buffer = vec![0; 256 * 224];
     let mut scaled_buffer = vec![0; SCALED_WINDOW_WIDTH * SCALED_WINDOW_HEIGHT];
     let camera = state::structs::Camera::new(0.0, 0.0);
 
+    // Create window only if not in headless mode
+    let mut window = if !headless_mode {
+        Some(Window::new(
+            "Parallax Exporter",
+            SCALED_WINDOW_WIDTH,
+            SCALED_WINDOW_HEIGHT,
+            WindowOptions::default(),
+        ).unwrap_or_else(|e| {
+            panic!("{}", e);
+        }))
+    } else {
+        None
+    };
 
     let state = State {
         camera,
@@ -43,7 +48,7 @@ fn main() {
         window_buffer: &mut window_buffer,
         window_width: SCALED_WINDOW_WIDTH,
         window_height: SCALED_WINDOW_HEIGHT,
-        window: &mut window,
+        window: window.as_mut(),
         scaled_buffer: &mut scaled_buffer,
         art_width: 256,
         art_height: 224,
@@ -54,5 +59,5 @@ fn main() {
         last_light_house_sprite_frame_index_change: std::time::Instant::now(),
     };
 
-    start_event_loop(state, core_logic, experimental_mode);
+    start_event_loop(state, core_logic, experimental_mode, headless_mode);
 }

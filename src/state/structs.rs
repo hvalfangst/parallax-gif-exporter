@@ -22,7 +22,7 @@ pub struct State<'a> {
     pub window_buffer: &'a mut Vec<u32>, // Window buffer
     pub window_width: usize, // Width of the window
     pub window_height: usize, // Height of the window
-    pub window: &'a mut Window, // Window object
+    pub window: Option<&'a mut Window>, // Optional window object
     pub scaled_buffer: &'a mut Vec<u32>, // Scaled buffer
     pub art_width: usize, // Width of the game world
     pub art_height: usize, // Height of the game world

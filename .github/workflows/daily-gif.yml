@@ -24,7 +24,7 @@ jobs:
         run: mkdir -p mutations
 
       - name: Build and run
-        run: cargo run -- --experimental
+        run: cargo run -- --experimental --headless
 
       - name: Commit and push if changes
         run: |
