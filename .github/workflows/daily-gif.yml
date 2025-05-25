@@ -8,6 +8,8 @@ on:
 jobs:
   generate-gif:
     runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
       - uses: actions/checkout@v4
@@ -23,15 +25,16 @@ jobs:
       - name: Create mutations directory
         run: mkdir -p mutations
 
-      - name: Build and run
+      - name: Run GIF generator in experimental headless mode
         run: cargo run -- --experimental --headless
 
-      - name: Commit and push if changes
+      - name: Configure Git
         run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
+          git config --global user.name "GIF Exporter Bot"
+          git config --global user.email "<>"
+
+      - name: Commit and push generated GIF
+        run: |
           git add mutations/
           git commit -m "Add generated GIF for $(date +'%Y-%m-%d')" || exit 0
-          git push "https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          git push origin main
