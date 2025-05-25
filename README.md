@@ -22,7 +22,7 @@ The shell script 'up' builds and runs our application by executing the following
 2. cargo run
 ```
 
-## Today's mutation
+## Today's (2025-05-25) mutation
 
 ![](mutation.gif)
 
