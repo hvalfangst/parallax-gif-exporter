@@ -1,14 +1,16 @@
 use crate::state::structs::State;
 
-pub fn render_pixel_buffer(game_state: &mut State) {
+pub fn render_pixel_buffer(game_state: &mut State, headless: bool) {
     // Scale the buffer to the screen resolution
     scale_buffer(&game_state.window_buffer, &mut game_state.scaled_buffer, game_state.art_width, game_state.art_height, game_state.window_width, game_state.window_height);
 
-    // Ensure the window is initialized
-    let window = game_state.window.as_mut().expect("Window should be initialized");
+    if !headless {
+        // Ensure the window is initialized
+        let window = game_state.window.as_mut().expect("Window should be initialized");
 
-    // Draw the scaled buffer onto the window
-    window.update_with_buffer(&game_state.scaled_buffer, game_state.window_width, game_state.window_height).unwrap();
+        // Draw the scaled buffer onto the window
+        window.update_with_buffer(&game_state.scaled_buffer, game_state.window_width, game_state.window_height).unwrap();
+    }
 }
 
 // Function to scale a buffer to a different resolution

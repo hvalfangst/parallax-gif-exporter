@@ -60,10 +60,7 @@ pub fn start_event_loop(mut game_state: State, core_logic_map: HashMap<String, R
 
         execute_core_logic(&mut game_state, &core_logic_map);
         update_pixel_buffer(&mut game_state);
-
-        if !headless {
-            render_pixel_buffer(&mut game_state);
-        }
+        render_pixel_buffer(&mut game_state, headless);
 
         if last_update.elapsed() >= std::time::Duration::from_nanos(0) {
             if frame_count < MAX_GIF_FRAMES {
