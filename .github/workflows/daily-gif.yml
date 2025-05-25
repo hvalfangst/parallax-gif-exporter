@@ -1,0 +1,30 @@
+name: Daily GIF Generation
+
+on:
+  schedule:
+    - cron: '0 6 * * *'  # Runs at 06:00 UTC every day
+  workflow_dispatch:      # Allows manual trigger
+
+jobs:
+  generate-gif:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Create mutations directory
+        run: mkdir -p mutations
+
+      - name: Build and run
+        run: cargo run -- --experimental
+
+      - name: Commit and push if changes
+        run: |
+          git config --local user.email "slackjw.fget@venturamail.com"
+          git config --local user.name "Ventura Bot"
+          git add mutations/
+          git commit -m "Add generated GIF for $(date +'%Y-%m-%d')" || exit 0
+          git push
