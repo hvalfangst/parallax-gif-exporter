@@ -35,8 +35,10 @@ jobs:
           git config --global user.name "GIF Exporter Bot"
           git config --global user.email "<>"
 
-      - name: Commit and push generated GIF
+      - name: Copy and commit generated GIF
         run: |
-          git add mutations/
+          DATE=$(date +'%Y_%m_%d')
+          cp "mutations/${DATE}.gif" mutation.gif
+          git add mutations/ mutation.gif
           git commit -m "Add generated GIF for $(date +'%Y-%m-%d')" || exit 0
           git push origin main
