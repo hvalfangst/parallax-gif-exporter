@@ -1,0 +1,16 @@
+[package]
+name = "parallax_gif_exporter"
+version = "0.5.0"
+edition = "2021"
+
+[dependencies]
+minifb = "0.21.0"
+image = "0.24.6"
+gif = "0.13.1"
+rand = "0.8"
+chrono = "0.4.41"
+
+[[bin]]
+name = "parallax_gif_exporter"
+path = "src/main.rs"
+
