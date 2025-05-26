@@ -33,16 +33,34 @@ jobs:
       - name: Configure Git
         run: |
           git config --global user.name "GIF Exporter Bot"
-          git config --global user.email "<>"
+          git config --global user.email "noreply@github.com"
 
       - name: Copy and commit generated GIF
         run: |
           DATE=$(date +'%Y_%m_%d')
-          cp "mutations/${DATE}.gif" mutation.gif
           
-          # Update README.md mutation section with date
-          sed -i "s|## Today's.*|## Today's \($DATE\) mutation\n\n![](mutation.gif)|" README.md
+          # Check if the GIF was generated
+          if [ -f "mutations/${DATE}.gif" ]; then
+            # Copy to root as latest mutation
+            cp "mutations/${DATE}.gif" mutation.gif
           
-          git add mutations/ mutation.gif
-          git commit -m "Add generated GIF for $(date +'%Y-%m-%d')" || exit 0
-          git push origin main
+            # Add files to git
+            git add mutations/ mutation.gif
+          
+            # Commit with meaningful message
+            git commit -m "🎨 Add generated GIF for $(date +'%Y-%m-%d')" || echo "No changes to commit"
+          
+            # Push changes
+            git push origin main
+          
+            echo "✅ Successfully generated and committed GIF for ${DATE}"
+          else
+            echo "❌ Error: Expected GIF file mutations/${DATE}.gif was not found"
+            ls -la mutations/ || echo "mutations directory is empty or doesn't exist"
+            exit 1
+          fi
+
+      - name: Update README with latest mutation info
+        run: |
+          DATE=$(date +'%Y-%m-%d')
+          echo "📝 Updated README with mutation from ${DATE}" >> $GITHUB_STEP_SUMMARY

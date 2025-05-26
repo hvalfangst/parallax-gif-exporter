@@ -26,7 +26,7 @@ The shell script 'up' builds and runs our application by executing the following
 
 ![](original.gif)
 
-## Today's (2025-05-25) mutation
+## Today's mutation
 
 ![](mutation.gif)
 
