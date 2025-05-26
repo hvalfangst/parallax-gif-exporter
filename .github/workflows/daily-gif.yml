@@ -41,7 +41,7 @@ jobs:
           cp "mutations/${DATE}.gif" mutation.gif
           
           # Update README.md mutation section with date
-          sed -i "s/## Today's.*/## Today's $DATE mutation\n\n![](mutation.gif)/" README.md
+          sed -i "s|## Today's.*|## Today's \($DATE\) mutation\n\n![](mutation.gif)|" README.md
           
           git add mutations/ mutation.gif
           git commit -m "Add generated GIF for $(date +'%Y-%m-%d')" || exit 0
